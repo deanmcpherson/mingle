@@ -1,5 +1,18 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {createRoot} from 'react-dom/client'
+
+const MingleComponent = ({wire, wireId, Component, mingleData}) => {
+
+    const [_, reRenderOnUpdate] = useState(0);
+    useEffect(() => {
+        Livewire.hook('morph.updated', ({ el, component }) => {
+            if (component.id === wireId) {
+                reRenderOnUpdate(n => n+1);
+            }
+        })
+    }, []);
+    return <Component wire={wire} wireId={wireId} mingleData={mingleData} />
+}
 
 const createComponent = (mingleId, wireId, Component) => {
 
@@ -15,7 +28,7 @@ const createComponent = (mingleId, wireId, Component) => {
 
     const root = createRoot(el)
 
-    root.render(<Component wire={wire} wireId={wireId} mingleData={JSON.parse(el.dataset.mingleData)} />)
+    root.render(<MingleComponent wire={wire} wireId={wireId}  Component={Component}  mingleData={JSON.parse(el.dataset.mingleData)} />)
 }
 
 const registerReactMingle = (name, component) => {
