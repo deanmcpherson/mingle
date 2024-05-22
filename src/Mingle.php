@@ -10,7 +10,7 @@ use function Livewire\Volt\{uses};
 class Mingle
 {
 
-    public static function volt() {
+    public function volt() {
             if (class_exists('Livewire\Volt\CompileContext') === false) {
                 return fn(): string => '';
             }
